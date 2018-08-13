@@ -34,7 +34,7 @@ $(function () {
         it('URL\'s are defined and are not empty', () => {
             allFeeds.forEach(element => {
                 expect(element.url).toBeDefined();
-                expect(element.url).not.toBe("", null, NaN);
+                expect(element.url).not.toBe("");
             });
         });
 
@@ -62,14 +62,10 @@ $(function () {
         const tagName = document.querySelector('body').className;
         const classList = document.querySelector('body').classList;
 
-        afterEach(function () {
-            classList.add('menu-hidden');
-        })
-
         it('is hidden', () => {
             const tagName = document.querySelector('body').className;
 
-            expect(tagName).toBe('menu-hidden');
+            expect(classList).toContain('menu-hidden');
         });
 
         /* Test that ensures the menu changes
@@ -79,14 +75,8 @@ $(function () {
         */
         it('changes visibility when the menu icon is clicked', () => {
 
-            if (classList.contains('menu-hidden')) {
-                menuIcon.click();
-                expect(classList.contains('menu-hidden')).toBe(false);
-            }
-            else {
-                menuIcon.click();
-                expect(classList.contains('menu-hidden')).toBe(true);
-            };
+            menuIcon.click();
+            expect(classList.contains('menu-hidden')).toBe(false);
         });
     });
 
@@ -98,7 +88,6 @@ $(function () {
         * Remember, loadFeed() is asynchronous so this test will require
         * the use of Jasmine's beforeEach and asynchronous done() function.
         */
-        var mySpy;
 
         beforeEach((done) => {
             loadFeed(0);
@@ -115,11 +104,17 @@ $(function () {
         * by the loadFeed function that the content actually changes.
         * Remember, loadFeed() is asynchronous.
         */
+        let feedOne,
+            feedTwo;
+
         beforeEach((done) => {
-            loadFeed(0);
-            feedOne = allFeeds[0].url;
-            feedTwo = allFeeds[1].url;
-            done();
+            loadFeed(0, () => {
+                feedOne = document.querySelector('.feed').innerHTML;
+                loadFeed(1, () => {
+                    feedTwo = document.querySelector('.feed').innerHTML;
+                    done();
+                });
+            });
         });
 
         it('prompts content change', () => {
