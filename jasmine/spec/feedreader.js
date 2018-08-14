@@ -45,7 +45,7 @@ $(function () {
         it('names are defined and are not empty', () => {
             allFeeds.forEach(element => {
                 expect(element.name).toBeDefined();
-                expect(element.name).not.toBe("", null, NaN);
+                expect(element.name).not.toBe("");
             });
         });
     });
@@ -58,13 +58,10 @@ $(function () {
         * the CSS to determine how we're performing the
         * hiding/showing of the menu element.
         */
-        const menuIcon = document.querySelector('.icon-list');
-        const tagName = document.querySelector('body').className;
+        const menuIcon = document.querySelector('.menu-icon-link');
         const classList = document.querySelector('body').classList;
 
         it('is hidden', () => {
-            const tagName = document.querySelector('body').className;
-
             expect(classList).toContain('menu-hidden');
         });
 
@@ -77,24 +74,28 @@ $(function () {
 
             menuIcon.click();
             expect(classList.contains('menu-hidden')).toBe(false);
+            menuIcon.click();
+            expect(classList.contains('menu-hidden')).toBe(true);
+
         });
     });
 
     /* Ths suite deals with the feed entries" */
     describe('Initial Entries', () => {
-        /* Test that ensures when the loadFeed
-        * function is called and completes its work, there is at least
-        * a single .entry element within the .feed container.
-        * Remember, loadFeed() is asynchronous so this test will require
-        * the use of Jasmine's beforeEach and asynchronous done() function.
+        /* Test that ensures when the loadFeed function is called
+        * and completes its work, there is at least a single 
+        *.entry element within the .feed container.
         */
 
+
         beforeEach((done) => {
-            loadFeed(0);
-            done();
+            loadFeed(0, done);
         })
+
         it('are present', () => {
-            expect(allFeeds.length).not.toBe(0); //at least a single entry
+            let entryList = document.querySelectorAll('.feed .entry-link .entry');
+
+            expect(entryList.length).toBeGreaterThan(0);
         });
     });
 
